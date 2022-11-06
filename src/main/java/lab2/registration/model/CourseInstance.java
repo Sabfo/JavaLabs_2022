@@ -32,6 +32,43 @@ public class CourseInstance {
      */
     private int capacity;
 
-    // TODO: добавить геттеры и сеттеры
-    
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
+    }
+
+    public long getInstructorId() {
+        return instructorId;
+    }
+
+    public void setInstructorId(long instructorId) {
+        this.instructorId = instructorId;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
 }

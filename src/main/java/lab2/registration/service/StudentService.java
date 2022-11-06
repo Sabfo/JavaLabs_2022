@@ -1,6 +1,7 @@
 package lab2.registration.service;
 
 import lab2.registration.model.ActionStatus;
+import lab2.registration.model.CourseInstance;
 
 /**
  * Интерфейс сервиса для студентов

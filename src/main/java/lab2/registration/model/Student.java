@@ -10,6 +10,11 @@ public class Student extends Person {
      */
     private long[] completedCourses;
 
-    // TODO: добавить геттеры и сеттеры
-    
+    public long[] getCompletedCourses() {
+        return completedCourses;
+    }
+
+    public void setCompletedCourses(long[] completedCourses) {
+        this.completedCourses = completedCourses;
+    }
 }
