@@ -1,4 +1,4 @@
-package lab2.model;
+package lab2.registration.model;
 
 /**
  * Enum для статуса выполнения операции

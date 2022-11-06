@@ -1,6 +1,6 @@
-package lab2.service;
+package lab2.registration.service;
 
-import lab2.model.ActionStatus;
+import lab2.registration.model.ActionStatus;
 
 /**
  * Интерфейс сервиса для студентов

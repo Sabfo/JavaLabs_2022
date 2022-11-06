@@ -1,4 +1,4 @@
-package lab2.model;
+package lab2.registration.model;
 
 /**
  * Класс для информации о студенте

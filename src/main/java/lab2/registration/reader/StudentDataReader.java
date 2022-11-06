@@ -1,7 +1,7 @@
-package lab2.reader;
+package lab2.registration.reader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lab2.model.Student;
+import lab2.registration.model.Student;
 
 import java.io.File;
 import java.io.IOException;

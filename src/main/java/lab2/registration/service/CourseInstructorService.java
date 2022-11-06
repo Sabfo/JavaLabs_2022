@@ -1,8 +1,8 @@
-package lab2.service;
+package lab2.registration.service;
 
-import lab2.model.Instructor;
-import lab2.model.ActionStatus;
-import lab2.model.Student;
+import lab2.registration.model.Instructor;
+import lab2.registration.model.ActionStatus;
+import lab2.registration.model.Student;
 
 /**
  * Интерфейс сервиса для преподавателя
