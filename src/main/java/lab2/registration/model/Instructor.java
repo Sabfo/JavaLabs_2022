@@ -8,13 +8,13 @@ public class Instructor extends Person {
     /**
      * Идентификаторы курсов, которые может вести преподаватель
      */
-    int[] canTeach;
+    long[] canTeach;
 
-    public int[] getCanTeach() {
+    public long[] getCanTeach() {
         return canTeach;
     }
 
-    public void setCanTeach(int[] canTeach) {
+    public void setCanTeach(long[] canTeach) {
         this.canTeach = canTeach;
     }
 }

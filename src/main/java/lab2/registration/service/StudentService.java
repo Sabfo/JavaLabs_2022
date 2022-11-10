@@ -16,20 +16,20 @@ public interface StudentService {
      * - в курсе есть свободные места.
      *
      * @param studentId идентификатор студента
-     * @param courseId идентификатор курса, соответствующий CourseInstance.id
+     * @param courseInstanceId идентификатор курса, соответствующий CourseInstance.id
      * @return результат выполнения регистрации
      */
-    ActionStatus subscribe(long studentId, long courseId);
+    ActionStatus subscribe(long studentId, long courseInstanceId);
 
     /**
      * Отмена регистрации студента на курс, которая возможна только в том случае, когда
      * курс еще не начался.
      *
      * @param studentId идентификатор студента
-     * @param courseId идентификатор курса, соответствующий CourseInstance.id
+     * @param courseInstanceId идентификатор курса, соответствующий CourseInstance.id
      * @return результат выполнения отмены регистрации
      */
-    ActionStatus unsubscribe(long studentId, long courseId);
+    ActionStatus unsubscribe(long studentId, long courseInstanceId);
 
     /**
      * @param studentId идентификатор студента

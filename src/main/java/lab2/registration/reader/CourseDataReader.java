@@ -1,6 +1,7 @@
 package lab2.registration.reader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lab2.registration.model.CourseInfo;
 import lab2.registration.model.CourseInstance;
 
@@ -14,17 +15,20 @@ public class CourseDataReader {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    public CourseDataReader() {
+        objectMapper.registerModule(new JavaTimeModule()); // Для работы с датами в json
+    }
     /**
      * @return список информации о каждой дисциплине
      */
-    public CourseInfo[] readBachelorStudentData() throws IOException {
+    public CourseInfo[] readCourseInfoData() throws IOException {
         return objectMapper.readValue(new File("src/main/resources/courseInfos.json"), CourseInfo[].class);
     }
 
     /**
      * @return список курсов
      */
-    public CourseInstance[] readMasterStudentData() throws IOException {
+    public CourseInstance[] readCourseInstanceData() throws IOException {
         return objectMapper.readValue(new File("src/main/resources/courseInstances.json"), CourseInstance[].class);
     }
 

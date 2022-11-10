@@ -10,10 +10,10 @@ import lab2.registration.model.Student;
 public interface CourseInstructorService {
     
     /**
-     * @param courseId идентификатор курса
+     * @param courseInstanceId идентификатор курса
      * @return список студентов, зарегистрированных на данный курс
      */
-    Student[] findStudentsByCourseId(long courseId);
+    Student[] findStudentsByCourseId(long courseInstanceId);
 
     /**
      * @param instructorId идентификатор преподавателя
@@ -23,9 +23,9 @@ public interface CourseInstructorService {
 
     /**
      * @param instructorId идентификатор преподавателя
-     * @param courseId идентификатор курса
+     * @param courseInfoId идентификатор курса
      * @return список преподавателей, которые могут прочитать данный курс вместо данного преподавателя
      */
-    Instructor[] findReplacement(long instructorId, long courseId);
+    Instructor[] findReplacement(long instructorId, long courseInfoId);
 
 }
