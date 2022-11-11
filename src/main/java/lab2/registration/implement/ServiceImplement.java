@@ -1,5 +1,6 @@
 package lab2.registration.implement;
 
+import lab2.registration.exceptions.*;
 import lab2.registration.model.*;
 import lab2.registration.reader.CourseDataReader;
 import lab2.registration.reader.InstructorDataReader;
@@ -10,7 +11,6 @@ import lab2.registration.service.StudentService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ServiceImplement implements StudentService, CourseInstructorService {
@@ -103,24 +103,29 @@ public class ServiceImplement implements StudentService, CourseInstructorService
      *
      * @param studentId        идентификатор студента
      * @param courseInstanceId идентификатор курса, соответствующий CourseInstance.id
-     * @return результат выполнения регистрации
      */
     @Override
-    public ActionStatus subscribe(long studentId, long courseInstanceId) {
+    public void subscribe(long studentId, long courseInstanceId) throws CourseDoesntExistException,
+            CourseHasAlreadyStartedException, CourseHasNoPlaceException, SubjectDoesNotExistException,
+            StudentHasAlreadySubscribedException, StudentDoesNotHavePrerequisitesException {
+
         long amountTakenPlaces = registration.values().stream().flatMap(Collection::stream)
                 .filter(i -> i == courseInstanceId).count();
         CourseInstance ourCourseInstance = Arrays.stream(courseInstances)
-                .filter(i -> i.getCourseId() == courseInstanceId)   // Проверяем, что такой курс есть
-                .filter(i -> i.getStartDate().isAfter(LocalDate.now())) // он не начался
-                .filter(i -> i.getCapacity() >= amountTakenPlaces) // И есть места
+                .filter(i -> i.getCourseId() == courseInstanceId)
                 .findFirst().orElse(null);
         if (ourCourseInstance == null)
-            return ActionStatus.NOK;
+            throw new CourseDoesntExistException("The course doesn't exist");
+        if (ourCourseInstance.getStartDate().isAfter(LocalDate.now()))
+            throw new CourseHasAlreadyStartedException("The course has already started so we couldn't subscribe it");
+        if (ourCourseInstance.getCapacity() <= amountTakenPlaces)
+            throw new CourseHasNoPlaceException("There are no places in the course");
+
 
         CourseInfo courseInfo = Arrays.stream(courseInfos).filter(i -> i.getId() == ourCourseInstance.getCourseId())
                 .findFirst().orElse(null);
         if (courseInfo == null) // Нет такой дисциплины
-            return ActionStatus.NOK;
+            throw new SubjectDoesNotExistException("There is no subject");
 
         List<Long> list = registration.computeIfAbsent(studentId, k -> new ArrayList<>());
 
@@ -136,19 +141,18 @@ public class ServiceImplement implements StudentService, CourseInstructorService
                 })
                 .filter(i -> i.getId() == studentId)
                 .filter(i -> registration.get(i.getId()).stream().noneMatch(x -> x == ourCourseInstance.getId()))
-                .findFirst().orElse(null); // Нашли студента и видим, что он ещё не записан на этот курс
+                .findFirst().orElse(null);
         if (student == null)
-            return ActionStatus.NOK;
+            throw new StudentHasAlreadySubscribedException("The student has already subscribed to this course");
 
         long[] prerequisites = courseInfo.getPrerequisites();
         if (prerequisites != null) {
             if(!Arrays.stream(prerequisites).allMatch(i ->
                     Arrays.stream(student.getCompletedCourses()).anyMatch(c -> c == i)))
-                return ActionStatus.NOK;
+                throw new StudentDoesNotHavePrerequisitesException("The student has not completed all the required courses");
         }
 
         list.add(ourCourseInstance.getId());
-        return ActionStatus.OK;
     }
 
     /**
@@ -157,19 +161,19 @@ public class ServiceImplement implements StudentService, CourseInstructorService
      *
      * @param studentId        идентификатор студента
      * @param courseInstanceId идентификатор курса, соответствующий CourseInstance.id
-     * @return результат выполнения отмены регистрации
      */
     @Override
-    public ActionStatus unsubscribe(long studentId, long courseInstanceId) {
+    public void unsubscribe(long studentId, long courseInstanceId)
+            throws CourseDoesntExistException, CourseHasAlreadyStartedException, StudentHasNotSubscribedException {
+
         CourseInstance courseInstance = Arrays.stream(courseInstances)
                 .filter(c -> c.getId() == courseInstanceId).findFirst().orElse(null);
         if (courseInstance == null)
-            return ActionStatus.NOK;
+            throw new CourseDoesntExistException("The course doesn't exist");
         if (courseInstance.getStartDate().isAfter(LocalDate.now()))
-            return ActionStatus.NOK;
+            throw new CourseHasAlreadyStartedException("The course has already started so we couldn't unsubscribe it");
         if (registration.get(studentId).remove(courseInstanceId))
-            return ActionStatus.NOK;
-        return ActionStatus.OK;
+            throw new StudentHasNotSubscribedException("The student did not register for the course");
     }
 
     /**
